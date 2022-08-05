@@ -15,7 +15,6 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   CI:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -37,3 +36,22 @@ jobs:
           tags: |
             zepolsoft/kube-news:latest
             zepolsoft/kube-news:${{github.run_number}}
+  CD:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Azure Kubernetes set context
+        uses: Azure/aks-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{secrets.K8S_CONFIG}}
+      
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v4.3
+        with:
+          images: zepolsoft/kube-news:${{github.run_number}}
+          manifests: |
+            k8s/deployment.yaml
