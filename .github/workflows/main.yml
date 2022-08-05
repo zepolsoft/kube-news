@@ -27,10 +27,11 @@ jobs:
         with:
           username: ${{secrets.DOCKERHUB_USER}}
           password: ${{secrets.DOCKERHUB_PSWD}}
+          
       - name: Build and push Docker images
         uses: docker/build-push-action@v3.1.0
         with:
-          file: ./src/Dokerfile
+          file: ./src/Dockerfile
           context: ./src
           push: true
           tags: |
