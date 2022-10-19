@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: postgre
-          image: postgres:14.3
+          image: postgres:15.0
           ports:
             - containerPort: 5432
           env:
@@ -25,6 +25,7 @@ spec:
           - name: POSTGRES_DB
             value: "kubenews"
 ---
+#Service do Postgre
 apiVersion: v1
 kind: Service
 metadata:
@@ -36,6 +37,7 @@ spec:
   - port: 5432
     targetPort: 5432
 ---
+#Deployment da Aplicação
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,6 +55,8 @@ spec:
       containers:
       - name: kubenews
         image: zepolsoft/kube-news:v1
+        ports:
+        - containerPort: 8080
         env:
         - name: DB_DATABASE
           value: "kubenews"
@@ -63,6 +67,7 @@ spec:
         - name: DB_HOST
           value: "postgre"
 ---
+#Service da Aplicação
 apiVersion: v1
 kind: Service
 metadata:
@@ -74,5 +79,5 @@ spec:
   - port: 80
     targetPort: 8080
     nodePort: 30000
-  type: LoadBalancer
+  type: NodePort
 
