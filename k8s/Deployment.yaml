@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
       - name: kubenews
-        image: zepolsoft/kube-news:v1
+        image: zepolsoft/kube-news:{{TAG}}
         ports:
         - containerPort: 8080
         env:
